@@ -1,14 +1,18 @@
 package capgemini.project.banking;
 
+
+
+import capgemini.project.account.Account;
+
 public interface accountOperation {
-	public String createAccount();
+	public boolean createAccount();
 	
-	public String login(int accountNo, int pin);
+	public String login(int accountNo, long pin);
 	
-	public double showBalance(int accountNo);
+	public double showBalance();
 	
-	public  String deposit(int accountNo, String type);
+	public  String deposit();
 	
-	public  String withdraw(int accountNo, String type);
+	public  String withdraw();
 	
 }
