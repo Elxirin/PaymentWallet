@@ -1,8 +1,8 @@
-package capgemini.project.banking;
+package com.capgemini.banking.operation;
 
 
 
-import capgemini.project.account.Account;
+import com.capgemini.banking.bean.Account;
 
 public interface accountOperation {
 	public boolean createAccount();

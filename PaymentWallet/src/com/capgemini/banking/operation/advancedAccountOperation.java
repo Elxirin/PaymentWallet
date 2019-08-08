@@ -1,8 +1,8 @@
-package capgemini.project.banking;
+package com.capgemini.banking.operation;
 
 public interface advancedAccountOperation {
 
-	public String fundTransfer(int accountNo,double amount);
+	public String fundTransfer();
 	
 	public String printTransactions(int accountNo);
 }

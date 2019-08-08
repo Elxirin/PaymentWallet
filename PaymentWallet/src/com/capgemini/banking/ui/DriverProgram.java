@@ -1,8 +1,8 @@
-package capgemini.project.WalletImplementation;
+package com.capgemini.banking.ui;
 
 import java.util.Scanner;
 
-import capgemini.project.account_implementation.AccountImplementationList;
+import com.capgemini.banking.implementation.AccountImplementationList;
 
 public class DriverProgram {
 
@@ -19,6 +19,7 @@ public class DriverProgram {
 			ch = sc.nextInt();
 			switch (ch) {
 			case 1:
+				System.out.println("Enter Account No and Pin : ");
 				String s = accImp.login(sc.nextInt(), sc.nextInt());
 				if (s.equals("Successfull")) {
 					System.out.println("\n"+s+"\n\n");
@@ -27,7 +28,8 @@ public class DriverProgram {
 						System.out.println("1. Deposit");
 						System.out.println("2. Withdraw");
 						System.out.println("3. Show Balance");
-						System.out.println("0. EXIT");
+						System.out.println("4. Fund Transfer");
+						System.out.println("9. Sign Out");
 						ch = sc.nextInt();
 						switch(ch) {
 						case 1:
@@ -39,8 +41,19 @@ public class DriverProgram {
 						case 3:
 							System.out.println(accImp.showBalance());
 							break;
+						case 4:
+							System.out.println(accImp.fundTransfer());
+							break;
 						case 0:
-							System.exit(0);
+							//System.exit(0);
+							break;
+						case 9:
+							break;
+						default:
+								System.out.println("Please enter Valid Choice");
+								break;
+						}
+						if(ch==9) {
 							break;
 						}
 					}
@@ -49,13 +62,16 @@ public class DriverProgram {
 				}
 				break;
 			case 2:
-				accImp.createAccount();
+				if(accImp.createAccount()){
+					System.out.println("Succesfully Created");
+				}
 				break;
 			case 0:
 				System.exit(0);
 			default :
 				System.out.println("Please Choose from the Menu\n\n");
-
+			case 7:
+				accImp.showList();
 			
 			}
 		}

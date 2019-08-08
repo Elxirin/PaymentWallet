@@ -1,4 +1,4 @@
-package capgemini.project.account;
+package com.capgemini.banking.bean;
 
 import java.util.Scanner;
 
