@@ -1,16 +1,19 @@
 package com.capgemini.banking.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
-public abstract class Account {
+public abstract class Account implements Serializable {
 
-	protected static int accGen = 1000;
+	protected  int accGen = 1000;
 	protected int accountNo;
 	protected long pin;
-	protected String name, accType;
+	protected String name, accType; 
 	protected double svBalance, crBalance, openingBal;
-
-	Scanner sc = new Scanner(System.in);
+	protected List<String> trans = new ArrayList<String>();
+	transient Scanner sc = new Scanner(System.in);
 
 	public Account() {
 		
@@ -26,11 +29,20 @@ public abstract class Account {
 		System.out.println("Your Account No is : " + accountNo + "\nand Temporary Pin is :" + pin);
 	}
 
-	public Account getAccount() {
+	public int getAccGen() {
+		return accGen;
+	}
+
+	public void setAccGen(int accGen) {
+		this.accGen = accGen;
+	}
+
+	public Account getAccount(int lastAccNo) {
 		System.out.println("Enter Name on the Account\t Account Type Savings/Current \topeneing Balance :");
 		this.name = sc.next();
 		this.accType = sc.next();
 		this.svBalance = sc.nextDouble();
+		accGen = lastAccNo;
 		accGen++;
 		accountNo = accGen;
 		pin = Math.round(Math.random() * 10000);
@@ -38,6 +50,23 @@ public abstract class Account {
 		return this;
 	}
 	
+	public List<String> getTrans() {
+		return trans;
+	}
+
+	private void setTrans(List<String> trans) {
+		this.trans = trans;
+	}
+	
+	public long getPin() {
+		return this.pin;
+	}
+	
+	public boolean setPin(long pin) {
+		this.pin = pin;
+		return true;
+	}
+
 	public void setBalance(double bal) {
 		if(this.accType.equals("Savings"))
 			setSvBalance(bal);
@@ -58,13 +87,9 @@ public abstract class Account {
 		this.accountNo = accountNo;
 	}
 
-	public long getPin() {
-		return pin;
-	}
+	
 
-	private void setPin(long pin) {
-		this.pin = pin;
-	}
+	
 
 	public String getName() {
 		return name;
