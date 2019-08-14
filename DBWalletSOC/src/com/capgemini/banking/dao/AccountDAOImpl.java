@@ -15,12 +15,13 @@ import com.capgemini.banking.exceptions.AccountNotFoundException;
 import com.capgemini.banking.exceptions.InsufficientBalanceException;
 
 public class AccountDAOImpl implements AccountDAO {
-	
+
 	Connection connection;
 	DBUtility db;
+
 	public AccountDAOImpl() {
-			db = new DBUtility();
-			connection = db.getConnection();
+		db = new DBUtility();
+		connection = db.getConnection();
 	}
 
 	private Connection getConnection() {
@@ -33,7 +34,7 @@ public class AccountDAOImpl implements AccountDAO {
 		String str1 = "INSERT INTO transaction(transactionId,accountId,tran_date,description,tran_type,amount) VALUES(TRANNO.nextVal,?,?,?,?,?)";
 		String[] str2 = { "transactionId", "accountId", "tran_date", "description", "tran_type", "amount" };
 		int acnum = 0;
-		try(PreparedStatement stmt = getConnection().prepareStatement(str, new String[] { "accountid" })) {
+		try (PreparedStatement stmt = getConnection().prepareStatement(str, new String[] { "accountid" })) {
 			stmt.setString(1, account.getName());
 			stmt.setDouble(2, account.getOpeningBal());
 			stmt.setDouble(3, account.getOpeningBal());
@@ -58,7 +59,7 @@ public class AccountDAOImpl implements AccountDAO {
 		double amt = -1;
 		// int id =0;
 		String str1 = "SELECT currentbal FROM account WHERE accountId=?";
-		try(PreparedStatement stmt = getConnection().prepareStatement(str1)) {
+		try (PreparedStatement stmt = getConnection().prepareStatement(str1)) {
 			stmt.setInt(1, accNo);
 			ResultSet set = stmt.executeQuery();
 			while (set.next()) {
@@ -73,13 +74,24 @@ public class AccountDAOImpl implements AccountDAO {
 	}
 
 	@Override
-	public ResultSet readAll(int accNo) {
-		if(read(accNo)!=-1){
+	public ArrayList<String> readAll(int accNo) {
+
+		if (read(accNo) != -1) {
 			String str1 = "SELECT * FROM transaction WHERE accountId=?";
+			ArrayList<String> ar = new ArrayList<String>();
 			ResultSet rs = db.exTQuery(str1, accNo);
-			return rs;
-		}else
-		return null;
+			try {
+				while (rs.next()) {
+
+					ar.add(rs.getInt(1) + "\t" + rs.getInt(2) + "\t" + rs.getTimestamp(3) + "\t" + rs.getString(4)
+							+ "\t" + rs.getString(5) + "\t" + rs.getDouble(6));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return ar;
+		} else
+			return null;
 	}
 
 	@Override
@@ -92,20 +104,17 @@ public class AccountDAOImpl implements AccountDAO {
 			str2 = "INSERT INTO transaction(transactionId,accountId,tran_date,description,tran_type,amount) VALUES(TRANNO.nextVal,?,?,?,?,?)";
 			ResultSet rs2 = db.exTQuery(str2, "ACCOUNT CREDITED", "CR", accNO, amount);
 			return true;
-		}
-		else
-		if (type.equals("DB")) {
+		} else if (type.equals("DB")) {
 			str1 = "UPDATE account SET currentBal = currentBal-? WHERE accountId = ?";
 			ResultSet rs = db.exAQuery(str1, accNO, amount);
 
 			str2 = "INSERT INTO transaction(transactionId,accountId,tran_date,description,tran_type,amount) VALUES(TRANNO.nextVal,?,?,?,?,?)";
 			ResultSet rs2 = db.exTQuery(str2, "ACCOUNT DEBITED", "DB", accNO, amount);
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
-		
+
 	}
 
 	@Override

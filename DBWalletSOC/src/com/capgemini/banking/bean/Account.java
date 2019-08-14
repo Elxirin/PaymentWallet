@@ -1,16 +1,12 @@
 package com.capgemini.banking.bean;
 
-import java.io.Serializable;
+public class Account {
 
-public  class Account implements Serializable{
+	private static int accGen = 1000;
 
-	protected static int accGen = 1000;
-	
-	
-
-	protected int accountNo;
-	protected String name; 
-	protected double crBalance, openingBal;
+	private int accountNo;
+	private String name;
+	private double crBalance, openingBal;
 
 	public Account(String name, Double openingBal) {
 		this.name = name;
@@ -20,18 +16,14 @@ public  class Account implements Serializable{
 		this.crBalance = openingBal;
 	}
 
-
-	
 	public static int getAccGen() {
 		return accGen;
 	}
 
-
 	public static void setAccGen(int accGen) {
 		Account.accGen = accGen;
 	}
-	
-	
+
 	public int getAccountNo() {
 		return accountNo;
 	}
@@ -70,7 +62,4 @@ public  class Account implements Serializable{
 				+ ", openingBal=" + openingBal + "]";
 	}
 
-	
-
-	
 }

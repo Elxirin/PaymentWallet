@@ -1,8 +1,6 @@
 package com.capgemini.banking.ui;
 
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import com.capgemini.banking.bean.Account;
@@ -13,8 +11,8 @@ import com.capgemini.banking.service.AccountServiceImpl;
 public class Driver {
 	public static void main(String[] args) {
 		AccountServiceImpl asi = new AccountServiceImpl();
-		int ch=9;
-		
+		int ch = 9;
+
 		Scanner sc = new Scanner(System.in);
 		while (ch != 0) {
 			System.out.println("Welcome to Payement Wallet");
@@ -27,20 +25,20 @@ public class Driver {
 			System.out.println("6. Print Transactions");
 			System.out.println("7. Exit");
 			ch = sc.nextInt();
-			switch(ch) {
+			switch (ch) {
 			case 1:
 				System.out.println("Enter Your Name");
 				String name = sc.next();
 				System.out.println(" and Openeing Balance");
 				double bal = sc.nextDouble();
-				asi.create(new Account(name,bal));
+				asi.create(new Account(name, bal));
 				break;
 			case 2:
 				System.out.println("Enter the account number and Amount :");
 				int accno = sc.nextInt();
 				double amt = sc.nextDouble();
 				try {
-					if(asi.deposit(accno, amt)) {
+					if (asi.deposit(accno, amt)) {
 						System.out.println("Successful");
 					}
 				} catch (AccountNotFoundException e) {
@@ -52,7 +50,7 @@ public class Driver {
 				accno = sc.nextInt();
 				amt = sc.nextDouble();
 				try {
-					if(asi.withdraw(accno, amt)) {
+					if (asi.withdraw(accno, amt)) {
 						System.out.println("Successfull");
 					}
 				} catch (AccountNotFoundException e) {
@@ -63,51 +61,49 @@ public class Driver {
 				break;
 			case 4:
 				System.out.println("Enter the account number");
-				accno=sc.nextInt();
+				accno = sc.nextInt();
 				try {
 					System.out.println(asi.getBalance(accno));
 				} catch (AccountNotFoundException e) {
 					System.out.println(e.getMessage());
 				}
 				break;
-			case 5: 
+			case 5:
 				System.out.println("Enter your Account Number and Account Number to be credited and Amount :");
-				int accFrom=sc.nextInt();
+				int accFrom = sc.nextInt();
 				int accTo = sc.nextInt();
-				amt= sc.nextDouble();
+				amt = sc.nextDouble();
 				try {
-					if(asi.fundTransfer(accFrom, accTo, amt)) {
+					if (asi.fundTransfer(accFrom, accTo, amt)) {
 						System.out.println("Successful");
 					}
 					break;
 
 				} catch (AccountNotFoundException e) {
 					System.out.println(e.getMessage());
-					
+
 				} catch (InsufficientBalanceException e) {
 					System.out.println(e.getMessage());
 				}
 			case 6:
 				System.out.println("Enter the Account number");
-				accno=sc.nextInt();
+				accno = sc.nextInt();
 				try {
-					ResultSet s = asi.showTransaction(accno);
-					while(s.next()){
-						System.out.println(s.getInt(1)+"\t"+s.getInt(2)+"\t"+s.getTimestamp(3)+"\t"+s.getString(4)+"\t"+s.getString(5)+"\t"+s.getDouble(6));
+					ArrayList<String> ar = asi.showTransaction(accno);
+					for (String s : ar) {
+						System.out.println(s);
 					}
+
 				} catch (AccountNotFoundException e) {
 					System.out.println(e.getMessage());
-				} catch (SQLException e) {
-					e.printStackTrace();
 				}
 				break;
-			case 7 :
+			case 7:
 				System.exit(0);
 			default:
-					System.out.println("Please enter Valid Choice");
-					break;
+				System.out.println("Please enter Valid Choice");
+				break;
 			}
 		}
 	}
 }
-
